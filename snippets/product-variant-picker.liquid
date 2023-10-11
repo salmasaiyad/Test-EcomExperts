@@ -43,20 +43,38 @@
       {{ block.shopify_attributes }}
     >
       {%- for option in product.options_with_values -%}
+        {%- assign showSwatch = false -%}
+        {%- assign sizeOption = false -%}
+        {%- if option.name == 'Color' -%}
+          {%- assign showSwatch = true -%}
+        {%- endif -%}
+        {%- if option.name == 'Size' -%}
+          {%- assign sizeOption = true -%}
+        {%- endif -%}
         <div class="product-form__input product-form__input--dropdown">
           <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
             {{ option.name }}
           </label>
-          <div class="select">
+          <div class="{{option.name | downcase}} select {%- if showSwatch -%} swatches {%- endif -%}" >
             <select
               id="Option-{{ section.id }}-{{ forloop.index0 }}"
-              class="select__select"
+              {%- if showSwatch -%}class=" hasSwatch    select__select "
+              {%- else -%}class=" select__select "
+              {%- endif -%}
               name="options[{{ option.name | escape }}]"
               form="{{ product_form_id }}"
             >
+              {%- if sizeOption -%}
+                <option value="" selected="selected">Unselected</option>
+              {%- endif -%}
               {% render 'product-variant-options', product: product, option: option, block: block %}
             </select>
             {% render 'icon-caret' %}
+            {%- if showSwatch -%}
+              <div class="swatchwrapper">
+                {% render 'product-variant-options', product: product, option: option, showswatch: showSwatch, block: block %}
+              </div>
+            {%- endif -%}
           </div>
         </div>
       {%- endfor -%}

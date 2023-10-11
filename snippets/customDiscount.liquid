@@ -1,0 +1,67 @@
+<script src="{{ 'cart.min.js' | asset_url }}" defer="defer"></script>
+<script>
+    var freeProduct = 40400649551953;
+    var freeOnProductId = 40409557434449;
+window.addEventListener('SCE:add', (event) => {
+    // event.detail will be Shopify Cart object
+    var cart = event.detail;
+    if(cart.id == freeOnProductId){
+        let formData = {
+            'items': [{
+             'id': freeProduct,
+             'quantity': 1
+             }]
+        };
+        fetch(window.Shopify.routes.root + 'cart/add.js', {
+             method: 'POST',
+             headers: {
+               'Content-Type': 'application/json'
+             },
+             body: JSON.stringify(formData)
+           })
+           .then(response => {
+            
+           })
+           .catch((error) => {
+             console.error('Error:', error);
+        });
+    }
+});
+
+window.addEventListener('SCE:change', (event) => {
+    // event.detail will be Shopify Cart object
+    console.log(event.detail)
+    var cart = event.detail;
+    var lineKey = null;
+    cart.items.forEach(function(item){
+        if(item.variant_id == freeProduct ){
+            lineKey = item.key;
+        }
+    });
+    cart.items_removed.forEach(function(removedItem){
+        if(removedItem.variant_id == freeOnProductId ){
+            let formData = {
+                 'id': lineKey,
+                 'quantity': 0
+                };
+            const body = JSON.stringify({
+                    'id': lineKey,
+                    'quantity': 0
+                  });
+            fetch(window.Shopify.routes.root + 'cart/change.js', {
+                 method: 'POST',
+                 headers: {
+                   'Content-Type': 'application/json'
+                 },
+                 body: body
+               })
+               .then(response => {
+                    location.reload();
+               })
+               .catch((error) => {
+                 console.error('Error:', error);
+            });
+        }
+    });
+});
+</script>

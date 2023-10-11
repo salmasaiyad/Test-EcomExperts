@@ -956,8 +956,19 @@ class VariantSelects extends HTMLElement {
   constructor() {
     super();
     this.addEventListener('change', this.onVariantChange);
+    var sizeElements = this.querySelector('.size select');
+    sizeElements.selectedIndex = 0;
+    sizeElements.dispatchEvent(new Event('change'));
+    var swatchElements = this.querySelectorAll('.swatch input');
+    swatchElements.forEach((item, index) => {
+      item.addEventListener('click', this.syncSelectChange)
+    });
   }
-
+  syncSelectChange(){
+    var selectElem = document.querySelector(".hasSwatch");
+    selectElem.value = this.value;
+    selectElem.dispatchEvent(new Event('change'));
+  }
   onVariantChange() {
     this.updateOptions();
     this.updateMasterId();

@@ -959,6 +959,7 @@ class VariantSelects extends HTMLElement {
     var sizeElements = this.querySelector('.size select');
     sizeElements.selectedIndex = 0;
     sizeElements.dispatchEvent(new Event('change'));
+    this.toggleAddButton(true, '', true);
     var swatchElements = this.querySelectorAll('.swatch input');
     swatchElements.forEach((item, index) => {
       item.addEventListener('click', this.syncSelectChange)
@@ -990,7 +991,15 @@ class VariantSelects extends HTMLElement {
   }
 
   updateOptions() {
-    this.options = Array.from(this.querySelectorAll('select'), (select) => select.value);
+    var arrValue = [];
+    this.querySelectorAll('select').forEach((select, index) => {
+      if(select.value){
+        arrValue.push(select.value)
+      }else{
+        arrValue.push(select.options[1].value);
+      }
+      this.options = arrValue;
+    });
   }
 
   updateMasterId() {
@@ -1150,7 +1159,10 @@ class VariantSelects extends HTMLElement {
           addButtonUpdated ? addButtonUpdated.hasAttribute('disabled') : true,
           window.variantStrings.soldOut
         );
-
+        var sizeElements = this.querySelector('.size select');
+        if(!sizeElements.value){
+          this.toggleAddButton(true, '', true);
+        }
         publish(PUB_SUB_EVENTS.variantChange, {
           data: {
             sectionId,
@@ -1175,7 +1187,7 @@ class VariantSelects extends HTMLElement {
       addButton.removeAttribute('disabled');
       addButtonText.textContent = window.variantStrings.addToCart;
     }
-
+    
     if (!modifyClass) return;
   }
 

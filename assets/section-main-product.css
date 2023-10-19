@@ -1598,3 +1598,50 @@ a.product__text {
     border: none;
   }
 }
+/*swatch css*/
+.selectswatches {
+    position: relative;
+}
+.selectswatches .icon{
+  display: none;
+} 
+.selectswatches select{
+ /* visibility: hidden;*/
+  position: absolute;
+  height: 1px;
+  width: 1px;
+  padding: 0;
+  margin: 0;
+  top: 0;
+}
+.product-form__input .swatch {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  margin: 0 8px 0 0;
+  display: inline-block;
+  border-radius: 100%;
+}
+.product-form__input .swatch input[type='radio'] + label{
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  margin: 0;
+}
+.product-form__input .swatch input[type='radio']{
+  width: 20px;
+  height: 20px;
+  border-radius: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.product-form__input .swatch input[type='radio']:checked + label::before {
+  border:2px solid #fff;
+  width: 16px;
+  height:16px;
+  z-index:1;
+  left:1px;
+  top:1px;
+}
